@@ -13,7 +13,7 @@ st.set_page_config(page_title="Eco Waste Advisor", layout="centered")
 st.title("Food Ecofriendly Advisor")
 st.write("Take a photo of your food and get eco-friendly recommendations")
 
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"]) # type: ignore
+genai.configure(api_key="AIzaSyC_a87tIh1bF2jCKOnXbiHjcrK9jjstpCk") # type: ignore
 model = genai.GenerativeModel("gemini-2.5-flash") # type: ignore
 
 camera_image = st.camera_input("Take a photo of your food", )
@@ -27,8 +27,8 @@ if camera_image is not None:
         with st.spinner("Analyzing your food..."):
             response = model.generate_content([
                 """Please analyze this image of food.
-                return it is this format ONLY:
-                {"Impact": (only return "high" or "medium" or "low"), "Recommendations": "some recommendations in a bullet list format"}
+                return it in this valid JSON format ONLY:
+                {"Impact": (only return "high" or "medium" or "low" or "Invalid Image"), "Recommendations": "some recommendations in a bullet list format if there are any, if not then just return no recommendations"}
                 """,
                 {"mime_type": "image/jpeg", "data": image_data}
             ])
@@ -36,11 +36,10 @@ if camera_image is not None:
             raw = response.text
 
             import re, json
-            match = re.search(r"\[.*\]", raw, flags=re.DOTALL)
+            match = re.search(r"\{.*\}", raw, flags=re.DOTALL)
             if match:
                 json_str = match.group(0)
                 st.session_state.response = json.loads(json_str)
-                #st.success(str(st.session_state.data))
             else:
                 st.error("Model did not return valid JSON.")
                 st.write(raw)  
@@ -50,7 +49,9 @@ else:
 
 if st.session_state.response:
     response = st.session_state.response
-    if response["Impact"] == "high":
+    if response["Impact"] == "Invalid Image":
+        st.error("The image provided is invalid. Please try again with a different image.")
+    elif response["Impact"] == "high":
         st.error(f"Environmental Impact: ☢️ {response['Impact'].upper()} ☢️")
     elif response["Impact"] == "medium":
         st.warning(f"Environmental Impact: ⚠️ {response['Impact'].upper()} ⚠️")
