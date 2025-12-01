@@ -30,7 +30,7 @@ if "asked_ai" not in st.session_state:
 
 st.title("Land pollution Predictor")
 
-st.text("Upload a satellite image of a location to analyze its current pollution state and predict future pollution levels.")
+st.text("Upload a satellite image from google maps or another platform of a location on the map to analyze its current pollution state and predict future pollution levels.")
 
 file = st.file_uploader("Upload image of map", type=["png", "jpeg", "jpg"])
 
@@ -114,6 +114,7 @@ if st.session_state.data:
     st.header("Current Map State")
     st.write(dictionary[0]["current_map_state"])
     st.header("Polluted Charts")
+    st.markdown("*Predicted pollution levels after 10 years if pollution continues to increase:*")
 
     poll_ox_percentages = dictionary[1]["polluted_percentages_after_10_years"][0]["oxygen"]["value"]
     delta_poll_ox_percentages = dictionary[1]["polluted_percentages_after_10_years"][0]["oxygen"]["delta"]
@@ -158,6 +159,8 @@ if st.session_state.data:
     non_poll_green_df = pd.DataFrame.from_dict(dictionary[1]["polluted_percentages_after_10_years"][2]["greenery"]["dataframe"], orient='index', columns=['Green land Percentage'])
 
     st.header("Non Polluted Charts")
+    st.markdown("*Predicted pollution levels after 10 years if you follow the advice:*")
+
     c1, c2, c3 = st.columns(3)
     with c1:
         st.metric("Oxygen after 10 years", str(non_poll_ox_percentages) + "%")
@@ -180,25 +183,21 @@ if st.session_state.data:
 if st.session_state.asked_ai:
     st.title("Any Questions about Land Pollution? Ask me!")
 
-    # Configure Gemini
 
     if "model" not in st.session_state:
-        st.session_state.model = "gemini-2.5-flash"  # or gemini-1.5-pro
+        st.session_state.model = "gemini-2.5-flash"  
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Show previous chat
     for m in st.session_state.messages:
         with st.chat_message(m["role"]):
             st.markdown(m["content"])
 
-    # User input
     if prompt := st.chat_input("Ask me something"):
         st.session_state.messages.append({"role": "user", "content": "use this data to answer the user about land pollution: " + str(st.session_state.data) + prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Call Gemini
         model = genai.GenerativeModel(st.session_state.model) # type: ignore
         chat = model.start_chat(history=[
             {"role": msg["role"], "parts": [msg["content"]]} for msg in st.session_state.messages
@@ -211,4 +210,3 @@ if st.session_state.asked_ai:
 
         st.session_state.messages.append({"role": "assistant", "content": reply})
 
-    #dictionary[0]["current_map_state"]
