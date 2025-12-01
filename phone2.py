@@ -3,6 +3,8 @@ import google.generativeai as genai
 import base64
 from io import BytesIO
 from PIL import Image
+from streamlit_back_camera_input import back_camera_input
+
 
 if "response" not in st.session_state:
     st.session_state.response = None
@@ -15,7 +17,7 @@ st.write("Take a photo of your food and get eco-friendly recommendations")
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"]) # type: ignore
 model = genai.GenerativeModel("gemini-2.5-flash") # type: ignore
 
-camera_image = st.camera_input("Take a photo of your food")
+camera_image = st.back_camera_input("Take a photo of your food", ) # type: ignore
 
 if camera_image is not None:
     st.image(camera_image, caption="Captured image", use_container_width=True)
