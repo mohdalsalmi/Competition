@@ -47,8 +47,6 @@ if camera_image is not None:
 else:
     st.info("Use the camera input above to capture an image of food or items to help the environment.")
 
-st.error(st.session_state.response)
-
 if st.session_state.response:
     response = st.session_state.response
     if response["Impact"] == "high":
