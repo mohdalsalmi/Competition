@@ -3,7 +3,6 @@ import google.generativeai as genai
 import base64
 from io import BytesIO
 from PIL import Image
-from streamlit_back_camera_input import back_camera_input
 
 
 st.set_page_config(page_title="Eco Waste Advisor", layout="centered")
@@ -14,7 +13,7 @@ st.write("Take a photo of your waste and get eco-friendly disposal recommendatio
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"]) # type: ignore
 model = genai.GenerativeModel("gemini-2.5-flash") # type: ignore
 
-camera_image = st.back_camera_input("Take a photo of your waste/items", ) # type: ignore
+camera_image = st.camera_input("Take a photo of your waste")
 
 if camera_image is not None:
     st.image(camera_image, caption="Captured image", use_column_width=True)
