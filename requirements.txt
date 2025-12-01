@@ -3,4 +3,3 @@ pillow
 google-generativeai
 google-genai
 pandas
-streamlit_back_camera_input
