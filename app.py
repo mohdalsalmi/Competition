@@ -154,9 +154,9 @@ if st.session_state.data:
     delta_non_poll_co2_percentages = dictionary[3]["non_polluted_percentages_after_10_years"][1]["CO2"]["delta"]
     non_poll_co2_df = pd.DataFrame.from_dict(dictionary[3]["non_polluted_percentages_after_10_years"][1]["CO2"]["dataframe"], orient='index', columns=['CO2 Percentage'])
 
-    non_poll_green_percentages = dictionary[1]["polluted_percentages_after_10_years"][2]["greenery"]["value"]
-    delta_non_poll_green_percentages = dictionary[1]["polluted_percentages_after_10_years"][2]["greenery"]["delta"]
-    non_poll_green_df = pd.DataFrame.from_dict(dictionary[1]["polluted_percentages_after_10_years"][2]["greenery"]["dataframe"], orient='index', columns=['Green land Percentage'])
+    non_poll_green_percentages = dictionary[3]["non_polluted_percentages_after_10_years"][2]["greenery"]["value"]
+    delta_non_poll_green_percentages = dictionary[3]["non_polluted_percentages_after_10_years"][2]["greenery"]["delta"]
+    non_poll_green_df = pd.DataFrame.from_dict(dictionary[3]["non_polluted_percentages_after_10_years"][2]["greenery"]["dataframe"], orient='index', columns=['Green land Percentage'])
 
     st.header("Non Polluted Charts")
     st.markdown("*Predicted pollution levels after 10 years if you follow the advice:*")
