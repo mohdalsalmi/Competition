@@ -13,7 +13,7 @@ st.set_page_config(page_title="Eco Waste Advisor", layout="centered")
 st.title("Food Ecofriendly Advisor")
 st.write("Take a photo of your food and get eco-friendly recommendations")
 
-genai.configure(api_key="AIzaSyCxWdZmdqtazc1UyS3PcntwCaZH2j2lIk4") # type: ignore
+genai.configure(api_key=st.secrets["GEMINI_API_KEY"]) # type: ignore
 model = genai.GenerativeModel("gemini-2.5-flash") # type: ignore
 
 camera_image = st.camera_input("Take a photo of your food", )
